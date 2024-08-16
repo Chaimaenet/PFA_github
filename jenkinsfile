@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
+    }
+
+    stages {
+        stage('Login to DockerHub') {
+            steps {
+                script {
+                    // Connexion à DockerHub
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Construire les services définis dans docker-compose.yml
+                    sh 'docker-compose build'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Déployer les services définis dans docker-compose.yml
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Se déconnecter de DockerHub après le pipeline
+                sh 'docker logout'
+            }
+        }
+    }
+}
