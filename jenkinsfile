@@ -23,6 +23,14 @@ pipeline {
                 }
             }
         }
+stage('Push to DockerHub') {
+    steps {
+        script {
+            sh 'docker push chaima59/firstjob-app:latest'
+        }
+    }
+}
+
 
         stage('Deploy') {
             steps {
