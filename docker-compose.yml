@@ -3,6 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
+    image: chaima59/firstjob-app:latest  # Ajoutez cette ligne
     ports:
       - "8501:8501"
     depends_on:
